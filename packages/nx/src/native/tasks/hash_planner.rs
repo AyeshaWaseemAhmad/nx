@@ -1409,7 +1409,7 @@ fn upstream_output_roots(task_graph: &TaskGraph, task_id: &str) -> Vec<String> {
         ]
         .into_iter()
         .flatten()
-        .flat_map(|deps| deps.iter().map(String::as_str))
+        .flat_map(|deps| deps.iter().map(|edge| edge.id.as_str()))
         .collect::<Vec<&str>>()
     };
     let mut roots = Vec::new();
@@ -1696,6 +1696,8 @@ fn find_external_dependency_node_name<'a>(
 mod tests {
     use super::*;
     use crate::native::project_graph::types::{ExternalNode, Project, Target};
+    use crate::native::tasks::types::TaskGraphEdge;
+    use crate::native::test_utils::edges_to;
 
     fn mixed_cycle_planner(with_outputs: bool) -> HashPlanner {
         use crate::native::types::{DepsOutputsInput, JsInputs};
@@ -1834,7 +1836,7 @@ mod tests {
                             (
                                 id.clone(),
                                 if id == "app:build" {
-                                    vec!["leaf:build".to_string()]
+                                    edges_to(&["leaf:build"])
                                 } else {
                                     vec![]
                                 },
@@ -2287,8 +2289,8 @@ mod tests {
         .collect();
         let edges = |list: &[(&str, &[&str])]| {
             list.iter()
-                .map(|(id, deps)| (id.to_string(), strings(deps)))
-                .collect::<HashMap<String, Vec<String>>>()
+                .map(|(id, deps)| (id.to_string(), edges_to(deps)))
+                .collect::<HashMap<String, Vec<TaskGraphEdge>>>()
         };
         let task_graph = TaskGraph {
             roots: vec![],
