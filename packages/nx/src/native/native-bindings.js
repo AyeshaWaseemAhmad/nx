@@ -641,7 +641,6 @@ module.exports.logDebug = nativeBinding.logDebug
 module.exports.matchGlobPaths = nativeBinding.matchGlobPaths
 module.exports.matchOutputPaths = nativeBinding.matchOutputPaths
 module.exports.parseTaskStatus = nativeBinding.parseTaskStatus
-module.exports.ProbeOutcome = nativeBinding.ProbeOutcome
 module.exports.remove = nativeBinding.remove
 module.exports.restoreTerminal = nativeBinding.restoreTerminal
 module.exports.RunMode = nativeBinding.RunMode
